@@ -8,28 +8,9 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.layers import Embedding
 from keras.layers import LSTM
 import re
-from bs4 import BeautifulSoup
-from nltk.tokenize import WordPunctTokenizer
-import pandas as pd
-import numpy as np
-import re
 from sklearn.metrics import precision_recall_fscore_support
 from nltk.corpus import stopwords
 stop_words = stopwords.words('english')
-
-
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.utils import to_categorical
-from sklearn.model_selection import train_test_split
-
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression 
-
-from sklearn.model_selection import cross_val_score
-from sklearn import metrics
-from sklearn.metrics import classification_report
-from sklearn.metrics import confusion_matrix
 #%%
 train = pd.read_csv('train.csv')
 train['comment_text'] = train['comment_text'].map(lambda x: re.sub('\\n',' ',str(x)))
@@ -103,7 +84,7 @@ for i in range(len(classes)):
     print(precision_recall_fscore_support(y_test[:,i], res, average='macro'))
     models.append(model)
 #%%
-INPUT = 'Black people are really stupid'
+INPUT = 'You are full of shit bitch'
 t = tk.texts_to_sequences([INPUT])[0]
 if len(t) <= 4:
     test = t+t+t
@@ -113,9 +94,10 @@ else:
     test = t
 pad = pad_sequences([test], maxlen=36, padding='post')
 labels = []
+preds = []
 for i in range(len(classes)):
-    yhat = model.predict_classes(np.array(pad))
-    preds = model.predict(np.array(pad))
+    yhat = models[i].predict_classes(np.array(pad))
+    preds.append(float(models[i].predict(np.array(pad))[0]))
     if(yhat[0] == 1):
         labels.append(classes[i])
 print(labels)
