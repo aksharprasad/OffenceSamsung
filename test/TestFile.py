@@ -12,7 +12,7 @@ classes = ['toxic','severe_toxic','obscene','threat','identity_hate']
 for i in classes:
     models.append(load_model(i + '.h5'))
 #%%
-INPUT = 'You are full of shit'
+INPUT = input('Enter text: ')
 t = tk.texts_to_sequences([INPUT])[0]
 if len(t) <= 4:
     test = t+t+t
