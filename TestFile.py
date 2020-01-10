@@ -4,7 +4,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.models import load_model 
 #%%
 #This file is found in the 'Models and Tokenizer' folder
-pkl_file = open('offenseTokenizer.pickle', 'rb')
+pkl_file = open('tokenizer.pickle', 'rb')
 tk = pickle.load(pkl_file) 
 pkl_file.close()
 #%%
@@ -14,7 +14,7 @@ classes = ['toxic','severe_toxic','obscene','threat','identity_hate']
 for i in classes:
     models.append(load_model(i + '.h5'))
 #%%
-INPUT = 'You are full of shit'
+INPUT = 'You are a bitch'
 t = tk.texts_to_sequences([INPUT])[0]
 if len(t) <= 4:
     test = t+t+t
@@ -30,6 +30,9 @@ for i in range(len(classes)):
     preds.append(float(models[i].predict(np.array(pad))[0]))
     if(yhat[0] == 1):
         labels.append(classes[i])
-print(labels)
+if len(labels) != 0:
+    print(labels)
+else:
+    print("Neither offensive nor sensitive")
 #print(preds)   
 #%%
